@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using UniLinq;
 using KSP.UI.Screens;
 using Smooth.Pools;
+using Smooth.Slinq;
 using UnityEngine;
 
 namespace MuMech
@@ -68,7 +69,7 @@ namespace MuMech
             return vesselState.thrustCurrent / (vesselState.mass * vesselState.gravityForce.magnitude);
         }
 
-        [ValueInfoItem("Atmospheric pressure (Pa)", InfoItem.Category.Misc, format = "F3", units = "Pa")]
+        [ValueInfoItem("Atmospheric pressure (Pa)", InfoItem.Category.Misc, format = ValueInfoItem.SI, units = "Pa")]
         public double AtmosphericPressurekPA()
         {
             return FlightGlobals.getStaticPressure(vesselState.CoM) * 1000;
@@ -95,6 +96,12 @@ namespace MuMech
         public string OrbitSummaryWithInclination(Orbit o)
         {
             return OrbitSummary(o) + ", inc. " + o.inclination.ToString("F1") + "º";
+        }
+
+        [ValueInfoItem("Mean Anomaly", InfoItem.Category.Orbit, format = ValueInfoItem.ANGLE)]
+        public double MeanAnomaly()
+        {
+            return orbit.meanAnomaly * MathExtensions.Rad2Deg;
         }
 
         [ValueInfoItem("Orbit", InfoItem.Category.Orbit)]
@@ -311,6 +318,12 @@ namespace MuMech
         public double EscapeVelocity()
         {
             return Math.Sqrt(2 * mainBody.gravParameter / vesselState.radius);
+        }
+
+        [ValueInfoItem("Vessel name", InfoItem.Category.Vessel, showInEditor = false)]
+        public string VesselName()
+        {
+            return vessel.vesselName;
         }
 
         [ValueInfoItem("Vessel mass", InfoItem.Category.Vessel, format = "F3", units = "t", showInEditor = true)]
@@ -787,6 +800,10 @@ namespace MuMech
         [Persistent(pass = (int)Pass.Global)]
         public bool liveSLT = true;
         [Persistent(pass = (int)Pass.Global)]
+        public float altSLTScale = 0;
+        [Persistent(pass = (int)Pass.Global)]
+        public float machScale = 0;
+        [Persistent(pass = (int)Pass.Global)]
         public int TWRBody = 1;
         [Persistent(pass = (int)Pass.Global)]
         public int StageDisplayState = 0;
@@ -800,6 +817,7 @@ namespace MuMech
         [GeneralInfoItem("Stage stats (all)", InfoItem.Category.Vessel, showInEditor = true)]
         public void AllStageStats()
         {
+            Profiler.BeginSample("AllStageStats.init");
             // Unity throws an exception if we change our layout between the Layout event and
             // the Repaint event, so only get new data right before the Layout event.
             MechJebModuleStageStats stats = core.GetComputerModule<MechJebModuleStageStats>();
@@ -810,31 +828,17 @@ namespace MuMech
                 stats.RequestUpdate(this);
             }
 
-            int numStages = atmoStats.Length;
-            var stages = Enumerable.Range(0, numStages);
+            Profiler.EndSample();
 
+            Profiler.BeginSample("AllStageStats.UI1");
+
+            int numStages = atmoStats.Length;
+            var stages = Enumerable.Range(0, numStages).ToArray();
+            
             GUILayout.BeginVertical();
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Stage stats", GUILayout.ExpandWidth(true));
-
-            double geeASL;
-            if (HighLogic.LoadedSceneIsEditor)
-            {
-                if (bodies == null)
-                    bodies = FlightGlobals.Bodies.ConvertAll(b => b.GetName()).ToArray();
-
-                // We're in the VAB/SPH
-                TWRBody = GuiUtils.ComboBox.Box(TWRBody, bodies, this);
-                stats.editorBody = FlightGlobals.Bodies[TWRBody];
-                geeASL = FlightGlobals.Bodies[TWRBody].GeeASL;
-            }
-            else
-            {
-                // We're in flight
-                stats.editorBody = mainBody;
-                geeASL = mainBody.GeeASL;
-            }
 
             if (GUILayout.Button(StageDisplayStates[StageDisplayState], GUILayout.ExpandWidth(false)))
             {
@@ -849,8 +853,44 @@ namespace MuMech
                 }
                 stats.liveSLT = liveSLT;
             }
-
             GUILayout.EndHorizontal();
+
+            double geeASL;
+            if (HighLogic.LoadedSceneIsEditor)
+            {
+                GUILayout.BeginHorizontal();
+                if (bodies == null)
+                    bodies = FlightGlobals.Bodies.ConvertAll(b => b.GetName()).ToArray();
+
+                // We're in the VAB/SPH
+                TWRBody = GuiUtils.ComboBox.Box(TWRBody, bodies, this, false);
+                stats.editorBody = FlightGlobals.Bodies[TWRBody];
+                geeASL = FlightGlobals.Bodies[TWRBody].GeeASL;
+
+                GUILayout.BeginVertical();
+
+                GUILayout.BeginHorizontal();
+                altSLTScale = GUILayout.HorizontalSlider(altSLTScale, 0, 1, GUILayout.ExpandWidth(true));
+                stats.altSLT = Math.Pow(altSLTScale, 2) * stats.editorBody.atmosphereDepth;
+                GUILayout.Label(MuUtils.ToSI(stats.altSLT, 2) + "m", GUILayout.Width(80));
+                GUILayout.EndHorizontal();
+
+                GUILayout.BeginHorizontal();
+                machScale = GUILayout.HorizontalSlider(machScale, 0, 1, GUILayout.ExpandWidth(true));
+                stats.mach = Math.Pow(machScale * 2, 3);
+                GUILayout.Label(stats.mach.ToString("F1") + " M", GUILayout.Width(80));
+                GUILayout.EndHorizontal();
+
+                GUILayout.EndVertical();
+
+                GUILayout.EndHorizontal();
+            }
+            else
+            {
+                // We're in flight
+                stats.editorBody = mainBody;
+                geeASL = mainBody.GeeASL;
+            }
 
             switch (StageDisplayState)
             {
@@ -867,10 +907,24 @@ namespace MuMech
                     break;
             }
 
+            Profiler.EndSample();
+
+            Profiler.BeginSample("AllStageStats.UI2");
+
             GUILayout.BeginHorizontal();
             DrawStageStatsColumn("Stage", stages.Select(s => s.ToString()));
+
+            Profiler.EndSample();
+
+            Profiler.BeginSample("AllStageStats.UI3");
+
             bool noChange = true;
             if (showInitialMass) noChange &= showInitialMass = !DrawStageStatsColumn("Start Mass", stages.Select(s => atmoStats[s].startMass.ToString("F3") + " t"));
+
+            Profiler.EndSample();
+
+            Profiler.BeginSample("AllStageStats.UI4");
+
             if (showFinalMass) noChange &= showFinalMass = !DrawStageStatsColumn("End mass", stages.Select(s => atmoStats[s].endMass.ToString("F3") + " t"));
             if (showStagedMass) noChange &= showStagedMass = !DrawStageStatsColumn("Staged Mass", stages.Select(s => atmoStats[s].stagedMass.ToString("F3") + " t"));
             if (showBurnedMass) noChange &= showBurnedMass = !DrawStageStatsColumn("Burned Mass", stages.Select(s => atmoStats[s].resourceMass.ToString("F3") + " t"));
@@ -889,6 +943,7 @@ namespace MuMech
             GUILayout.EndHorizontal();
 
             GUILayout.EndVertical();
+            Profiler.EndSample();
         }
 
         static GUIStyle _columnStyle;
@@ -1156,8 +1211,7 @@ namespace MuMech
         {
             if (vessel.landedAt != string.Empty)
                 return vessel.landedAt;
-            string biome = ScienceUtil.GetExperimentBiome(mainBody, vessel.latitude, vessel.longitude);
-            return "" + biome;
+            return ScienceUtil.GetExperimentBiome(mainBody, vessel.latitude, vessel.longitude);
         }
 
         [ValueInfoItem("Current Biome", InfoItem.Category.Misc, showInEditor=false)]
