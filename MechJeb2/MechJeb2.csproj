@@ -69,7 +69,6 @@
     <Compile Include="CompatibilityChecker.cs" />
     <Compile Include="ComputerModule.cs" />
     <Compile Include="DisplayModule.cs" />
-    <Compile Include="EngineWrapper.cs" />
     <Compile Include="FlyingSim\SimulatedParachute.cs" />
     <Compile Include="FlyingSim\SimulatedPart.cs" />
     <Compile Include="FlyingSim\SimulatedVessel.cs" />
