@@ -444,7 +444,7 @@ namespace MuMech
         {
             mass = vessel.totalMass;
             CoM = vessel.CoMD;
-            orbitalVelocity = vessel.velocityD + vessel.orbit.GetRotFrameVel(vessel.orbit.referenceBody).xzy;
+            orbitalVelocity = vessel.obt_velocity;
         }
 
         // Calculate a bunch of simple quantities each frame.
@@ -784,8 +784,9 @@ namespace MuMech
                         Vector3 neg;
                         rw.GetPotentialTorque(out pos, out neg);
 
+                        // GetPotentialTorque reports the same value for pos & neg on ModuleReactionWheel 
                         torqueReactionWheel.Add(pos);
-                        torqueReactionWheel.Add(neg);
+                        torqueReactionWheel.Add(-neg);
                     }
                     else if (pm is ModuleEngines)
                     {
@@ -846,8 +847,10 @@ namespace MuMech
                         Vector3 neg;
                         g.GetPotentialTorque(out pos, out neg);
 
+                        // GetPotentialTorque reports the same value for pos & neg on ModuleGimbal
+
                         torqueGimbal.Add(pos);
-                        torqueGimbal.Add(neg);
+                        torqueGimbal.Add(-neg);
                         
                         if (g.useGimbalResponseSpeed)
                             torqueReactionSpeed6.Add((Mathf.Abs(g.gimbalRange) / g.gimbalResponseSpeed) * Vector3d.Max(pos.Abs(), neg.Abs()));
