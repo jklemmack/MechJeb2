@@ -34,12 +34,6 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
-    </Reference>
-    <Reference Include="KSPUtil">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program\KSP_Data\Managed\KSPUtil.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
@@ -169,96 +163,6 @@
     </Compile>
     <Compile Include="RCSSolver.cs" />
     <Compile Include="ReentrySimulation.cs" />
-    <Compile Include="SmoothFoundations\Algebraics\Either.cs" />
-    <Compile Include="SmoothFoundations\Algebraics\Option.cs" />
-    <Compile Include="SmoothFoundations\Algebraics\Tuple.cs" />
-    <Compile Include="SmoothFoundations\Algebraics\Unit.cs" />
-    <Compile Include="SmoothFoundations\Collections\Comparer.cs" />
-    <Compile Include="SmoothFoundations\Collections\CreateWithComparer.cs" />
-    <Compile Include="SmoothFoundations\Collections\EqualityComparer.cs" />
-    <Compile Include="SmoothFoundations\Collections\FuncEnumerable.cs" />
-    <Compile Include="SmoothFoundations\Collections\ICollectionExtensions.cs" />
-    <Compile Include="SmoothFoundations\Collections\IDictionaryExtensions.cs" />
-    <Compile Include="SmoothFoundations\Collections\IListExtensions.cs" />
-    <Compile Include="SmoothFoundations\Collections\IListStepper.cs" />
-    <Compile Include="SmoothFoundations\Collections\InspectorKeyValuePair.cs" />
-    <Compile Include="SmoothFoundations\Collections\LinkedListStepper.cs" />
-    <Compile Include="SmoothFoundations\Compare\Comparers\EnumComparers.cs" />
-    <Compile Include="SmoothFoundations\Compare\Comparers\KeyValuePairComparers.cs" />
-    <Compile Include="SmoothFoundations\Compare\Configuration.cs" />
-    <Compile Include="SmoothFoundations\Compare\Events.cs" />
-    <Compile Include="SmoothFoundations\Compare\Examples\ExampleConfiguration.cs" />
-    <Compile Include="SmoothFoundations\Compare\Factory.cs" />
-    <Compile Include="SmoothFoundations\Compare\Finder.cs" />
-    <Compile Include="SmoothFoundations\Compare\Utilities\LogUnregisteredOnDestroy.cs" />
-    <Compile Include="SmoothFoundations\Comparisons\Comparisons.cs" />
-    <Compile Include="SmoothFoundations\Comparisons\FuncComparer.cs" />
-    <Compile Include="SmoothFoundations\Comparisons\FuncEqualityComparer.cs" />
-    <Compile Include="SmoothFoundations\Comparisons\IComparableComparer.cs" />
-    <Compile Include="SmoothFoundations\Comparisons\IEquatableEqualityComparer.cs" />
-    <Compile Include="SmoothFoundations\Delegates\DelegateExtensions.cs" />
-    <Compile Include="SmoothFoundations\Delegates\Delegates.cs" />
-    <Compile Include="SmoothFoundations\Delegates\Tupled.cs" />
-    <Compile Include="SmoothFoundations\Dispose\Disposable.cs" />
-    <Compile Include="SmoothFoundations\Dispose\DisposalQueue.cs" />
-    <Compile Include="SmoothFoundations\Dispose\SmoothDisposer.cs" />
-    <Compile Include="SmoothFoundations\Events\GenericEvents.cs" />
-    <Compile Include="SmoothFoundations\Platform\BasePlatform.cs" />
-    <Compile Include="SmoothFoundations\Platform\Runtime.cs" />
-    <Compile Include="SmoothFoundations\Pools\KeyedPool.cs" />
-    <Compile Include="SmoothFoundations\Pools\KeyedPoolWithDefaultKey.cs" />
-    <Compile Include="SmoothFoundations\Pools\Pool.cs" />
-    <Compile Include="SmoothFoundations\Pools\PoolWithInitializer.cs" />
-    <Compile Include="SmoothFoundations\Pools\SystemPools.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Collections\Grouping.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Collections\Linked.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Collections\Lookup.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\ChainedOrPooled\AggregateContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\ChainedOrPooled\ConcatContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\ChainedOrPooled\EitherContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\ChainedOrPooled\FlattenContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\ChainedOrPooled\GroupByContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\ChainedOrPooled\GroupJoinContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\ChainedOrPooled\HashSetContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\ChainedOrPooled\IntContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\ChainedOrPooled\JoinContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\ChainedOrPooled\LinkedContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\ChainedOrPooled\PredicateContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\ChainedOrPooled\SelectContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\ChainedOrPooled\SelectOptionContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\ChainedOrPooled\SelectSlinqContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\ChainedOrPooled\ZipAllContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\ChainedOrPooled\ZipContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\Mutation\BacktrackDetector.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\Mutation\BacktrackException.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\Mutation\Mutator.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\Simple\FuncContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\Simple\FuncOptionContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\Simple\IEnumerableContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\Simple\IListContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\Simple\LinkedListContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Context\Simple\OptionContext.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Slinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Slinqable.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\DistinctLinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\DistinctSlinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\ExceptLinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\ExceptSlinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\GroupByLinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\GroupBySlinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\GroupJoinLinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\GroupJoinSlinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\IntersectLinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\IntersectSlinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\JoinLinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\JoinSlinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\OrderByLinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\OrderBySlinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\SlinqTest.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\UnionLinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\UnionSlinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\WhereTakeSelectAggregateLinq.cs" />
-    <Compile Include="SmoothFoundations\Slinq\Test\WhereTakeSelectAggregateSlinq.cs" />
     <Compile Include="SpeechBubble.cs" />
     <Compile Include="ToolbarWrapper.cs" />
     <Compile Include="UnityToolbag\Dispatcher\Dispatcher.cs" />
@@ -274,7 +178,6 @@
     <EmbeddedResource Include="Properties\shader" />
     <EmbeddedResource Include="Properties\shader2" />
     <EmbeddedResource Include="Properties\shader3" />
-    <None Include="SmoothFoundations\Slinq\Test\SlinqTest.unity" />
     <None Include="UnityToolbag\Dispatcher\README.md" />
     <None Include="UnityToolbag\Future\README.md" />
   </ItemGroup>
